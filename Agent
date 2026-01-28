@@ -1,0 +1,12 @@
+// Example snippet for Agent-level monitoring
+async function monitorInventoryFriction() {
+  const lowStockItems = await prisma.inventoryItem.findMany({
+    where: {
+      currentStock: { lte: prisma.inventoryItem.fields.parLevel }
+    }
+  });
+
+  lowStockItems.forEach(item => {
+    console.log(`[ALERT] Friction detected at ${item.locationId}: ${item.name} is below par!`);
+  });
+}

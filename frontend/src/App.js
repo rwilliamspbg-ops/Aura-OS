@@ -5,6 +5,18 @@ import io from 'socket.io-client';
 const socket = io('http://10.0.0.5:3001');
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+const handleHoldStart = (target) => {
+  targetRef.current = target;
+  setIsListening(true);
+  if (recognition) recognition.start();
+  socket.emit('voice-start', { role, target });
+};
+
+const handleHoldEnd = () => {
+  setIsListening(false);
+  if (recognition) recognition.stop();
+  socket.emit('voice-end', { role });
+};
 
 export default function App() {
   const [status, setStatus] = useState('OFFLINE');
@@ -65,10 +77,16 @@ const WaitressHUD = ({ orders }) => (
 );
 
 const styles = {
-  // Add your new styles here as defined in the previous step
-  appContainer: { background: '#000', height: '100vh', display: 'flex', flexDirection: 'column' },
-  hudBody: { flex: 1, display: 'flex', flexDirection: 'column', padding: '10px', position: 'relative' },
+  appContainer: { background: '#000', height: '100vh', display: 'flex', flexDirection: 'column', color: '#fff' },
+  topNav: { height: '50px', borderBottom: '1px solid #222', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px' },
+  hudBody: { flex: 1, display: 'flex', flexDirection: 'column', padding: '10px', position: 'relative', overflow: 'hidden' },
+  mainScroll: { flex: 1, overflowY: 'auto', marginBottom: '80px' },
   grid3Col: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' },
   tableCard: { background: '#0a0a0a', border: '1px solid #222', padding: '15px 5px', textAlign: 'center', borderRadius: '8px' },
-  // ... (Add remaining style objects)
+  pttDock: { position: 'absolute', bottom: '10px', left: '10px', right: '10px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' },
+  pttBtn: { padding: '20px', background: '#111', color: '#0F0', border: '1px solid #0F0', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' },
+  selectorBg: { background: '#000', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
+  neonText: { color: '#0F0', textShadow: '0 0 10px #0F0', marginBottom: '30px', letterSpacing: '2px' },
+  roleGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' },
+  roleCard: { padding: '30px', background: 'transparent', border: '1px solid #0F0', color: '#0F0', fontSize: '1rem', borderRadius: '15px', cursor: 'pointer', textTransform: 'uppercase' }
 };

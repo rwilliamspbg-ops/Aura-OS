@@ -1,33 +1,34 @@
 generator client {
-  provider = "prisma-client-js"
-  output   = "./generated"
+  provider        = "prisma-client-js"
+  output          = "./generated"
   previewFeatures = ["driverAdapters"]
 }
+
 datasource db {
   provider = "postgresql"
 }
 
 model User {
-  id           String    @id @default(cuid()) // This was missing or mismatched!
-  role         Role      @default(STAFF)
-  stripeId     String?   @unique
-  membership   Tier      @default(FREE)
-  sessions     Session[]
-  accounts     Account[] // Added to fix the second error
-  locationId   String?
-  location     Location? @relation(fields: [locationId], references: [id])
+  id         String    @id @default(cuid()) // This was missing or mismatched!
+  role       Role      @default(STAFF)
+  stripeId   String?   @unique
+  membership Tier      @default(FREE)
+  sessions   Session[]
+  accounts   Account[] // Added to fix the second error
+  locationId String?
+  location   Location? @relation(fields: [locationId], references: [id])
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Account {
-  id           String  @id @default(cuid())
-  userId       String
-  user         User    @relation(references: [id], fields: [userId], onDelete: Cascade)
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 // Keep your Location, InventoryItem, and Recipe models below...
@@ -36,19 +37,20 @@ model Location {
   name      String
   users     User[]
   inventory InventoryItem[]
-  recipes   Recipe[]        // Add this line
+  recipes   Recipe[] // Add this line
 }
 
 model InventoryItem {
-  id               String             @id @default(cuid())
-  name             String
-  currentStock     Int
-  parLevel         Int
-  unit             String
-  locationId       String
-  location         Location           @relation(fields: [locationId], references: [id])
+  id                String             @id @default(cuid())
+  name              String
+  currentStock      Int
+  parLevel          Int
+  unit              String
+  locationId        String
+  location          Location           @relation(fields: [locationId], references: [id])
   recipeIngredients RecipeIngredient[] // Add this line to fix the error
 }
+
 model Recipe {
   id          String             @id @default(cuid())
   name        String
@@ -65,6 +67,7 @@ model RecipeIngredient {
   inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
   quantity        Float
 }
+
 enum Role {
   OWNER
   MANAGER

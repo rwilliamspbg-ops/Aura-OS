@@ -122,34 +122,47 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  email: 'email',
-  name: 'name',
   role: 'role',
-  tier: 'tier',
-  locationId: 'locationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  stripeId: 'stripeId',
+  membership: 'membership',
+  locationId: 'locationId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
   id: 'id',
-  expiresAt: 'expiresAt',
-  token: 'token',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   userId: 'userId'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
-  accountId: 'accountId',
-  providerId: 'providerId',
-  userId: 'userId',
-  accessToken: 'accessToken',
-  refreshToken: 'refreshToken',
-  idToken: 'idToken',
-  expiresAt: 'expiresAt',
-  password: 'password'
+  userId: 'userId'
+};
+
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.InventoryItemScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  currentStock: 'currentStock',
+  parLevel: 'parLevel',
+  unit: 'unit',
+  locationId: 'locationId'
+};
+
+exports.Prisma.RecipeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  locationId: 'locationId'
+};
+
+exports.Prisma.RecipeIngredientScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  inventoryItemId: 'inventoryItemId',
+  quantity: 'quantity'
 };
 
 exports.Prisma.SortOrder = {
@@ -166,12 +179,26 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  OWNER: 'OWNER',
+  MANAGER: 'MANAGER',
+  STAFF: 'STAFF'
+};
 
+exports.Tier = exports.$Enums.Tier = {
+  FREE: 'FREE',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
-  Account: 'Account'
+  Account: 'Account',
+  Location: 'Location',
+  InventoryItem: 'InventoryItem',
+  Recipe: 'Recipe',
+  RecipeIngredient: 'RecipeIngredient'
 };
 
 /**

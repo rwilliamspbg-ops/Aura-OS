@@ -95,34 +95,47 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
-  email: 'email',
-  name: 'name',
   role: 'role',
-  tier: 'tier',
-  locationId: 'locationId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  stripeId: 'stripeId',
+  membership: 'membership',
+  locationId: 'locationId'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
   id: 'id',
-  expiresAt: 'expiresAt',
-  token: 'token',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   userId: 'userId'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
-  accountId: 'accountId',
-  providerId: 'providerId',
-  userId: 'userId',
-  accessToken: 'accessToken',
-  refreshToken: 'refreshToken',
-  idToken: 'idToken',
-  expiresAt: 'expiresAt',
-  password: 'password'
+  userId: 'userId'
+};
+
+exports.Prisma.LocationScalarFieldEnum = {
+  id: 'id',
+  name: 'name'
+};
+
+exports.Prisma.InventoryItemScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  currentStock: 'currentStock',
+  parLevel: 'parLevel',
+  unit: 'unit',
+  locationId: 'locationId'
+};
+
+exports.Prisma.RecipeScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  locationId: 'locationId'
+};
+
+exports.Prisma.RecipeIngredientScalarFieldEnum = {
+  id: 'id',
+  recipeId: 'recipeId',
+  inventoryItemId: 'inventoryItemId',
+  quantity: 'quantity'
 };
 
 exports.Prisma.SortOrder = {
@@ -139,12 +152,26 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.Role = exports.$Enums.Role = {
+  OWNER: 'OWNER',
+  MANAGER: 'MANAGER',
+  STAFF: 'STAFF'
+};
 
+exports.Tier = exports.$Enums.Tier = {
+  FREE: 'FREE',
+  PRO: 'PRO',
+  ENTERPRISE: 'ENTERPRISE'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Session: 'Session',
-  Account: 'Account'
+  Account: 'Account',
+  Location: 'Location',
+  InventoryItem: 'InventoryItem',
+  Recipe: 'Recipe',
+  RecipeIngredient: 'RecipeIngredient'
 };
 /**
  * Create the Client
@@ -156,10 +183,10 @@ const config = {
   "clientVersion": "7.3.0",
   "engineVersion": "9d6ad21cbbceab97458517b147a6a09ff43aa735",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"driverAdapters\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         String    @id @default(cuid())\n  email      String    @unique\n  name       String?\n  role       String    @default(\"STAFF\")\n  tier       String    @default(\"FREE\")\n  locationId String? // Links to your Restaurant\n  sessions   Session[]\n  accounts   Account[]\n  createdAt  DateTime  @default(now())\n  updatedAt  DateTime  @updatedAt\n}\n\nmodel Session {\n  id        String   @id\n  expiresAt DateTime\n  token     String   @unique\n  createdAt DateTime\n  updatedAt DateTime\n  userId    String\n  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\nmodel Account {\n  id           String    @id\n  accountId    String\n  providerId   String\n  userId       String\n  user         User      @relation(references: [id], fields: [userId], onDelete: Cascade)\n  accessToken  String?\n  refreshToken String?\n  idToken      String?\n  expiresAt    DateTime?\n  password     String?\n}\n"
+  "inlineSchema": "generator client {\n  provider        = \"prisma-client-js\"\n  output          = \"./generated\"\n  previewFeatures = [\"driverAdapters\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id         String    @id @default(cuid()) // This was missing or mismatched!\n  role       Role      @default(STAFF)\n  stripeId   String?   @unique\n  membership Tier      @default(FREE)\n  sessions   Session[]\n  accounts   Account[] // Added to fix the second error\n  locationId String?\n  location   Location? @relation(fields: [locationId], references: [id])\n}\n\nmodel Session {\n  id     String @id @default(cuid())\n  userId String\n  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\nmodel Account {\n  id     String @id @default(cuid())\n  userId String\n  user   User   @relation(references: [id], fields: [userId], onDelete: Cascade)\n}\n\n// Keep your Location, InventoryItem, and Recipe models below...\nmodel Location {\n  id        String          @id @default(cuid())\n  name      String\n  users     User[]\n  inventory InventoryItem[]\n  recipes   Recipe[] // Add this line\n}\n\nmodel InventoryItem {\n  id                String             @id @default(cuid())\n  name              String\n  currentStock      Int\n  parLevel          Int\n  unit              String\n  locationId        String\n  location          Location           @relation(fields: [locationId], references: [id])\n  recipeIngredients RecipeIngredient[] // Add this line to fix the error\n}\n\nmodel Recipe {\n  id          String             @id @default(cuid())\n  name        String\n  ingredients RecipeIngredient[]\n  locationId  String\n  location    Location           @relation(fields: [locationId], references: [id])\n}\n\nmodel RecipeIngredient {\n  id              String        @id @default(cuid())\n  recipeId        String\n  recipe          Recipe        @relation(fields: [recipeId], references: [id])\n  inventoryItemId String\n  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])\n  quantity        Float\n}\n\nenum Role {\n  OWNER\n  MANAGER\n  STAFF\n}\n\nenum Tier {\n  FREE\n  PRO\n  ENTERPRISE\n}\n"
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"tier\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"locationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"token\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"accountId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"providerId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"},{\"name\":\"accessToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"idToken\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"expiresAt\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"role\",\"kind\":\"enum\",\"type\":\"Role\"},{\"name\":\"stripeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"membership\",\"kind\":\"enum\",\"type\":\"Tier\"},{\"name\":\"sessions\",\"kind\":\"object\",\"type\":\"Session\",\"relationName\":\"SessionToUser\"},{\"name\":\"accounts\",\"kind\":\"object\",\"type\":\"Account\",\"relationName\":\"AccountToUser\"},{\"name\":\"locationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"object\",\"type\":\"Location\",\"relationName\":\"LocationToUser\"}],\"dbName\":null},\"Session\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"SessionToUser\"}],\"dbName\":null},\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"AccountToUser\"}],\"dbName\":null},\"Location\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"users\",\"kind\":\"object\",\"type\":\"User\",\"relationName\":\"LocationToUser\"},{\"name\":\"inventory\",\"kind\":\"object\",\"type\":\"InventoryItem\",\"relationName\":\"InventoryItemToLocation\"},{\"name\":\"recipes\",\"kind\":\"object\",\"type\":\"Recipe\",\"relationName\":\"LocationToRecipe\"}],\"dbName\":null},\"InventoryItem\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"currentStock\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"parLevel\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"unit\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"locationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"object\",\"type\":\"Location\",\"relationName\":\"InventoryItemToLocation\"},{\"name\":\"recipeIngredients\",\"kind\":\"object\",\"type\":\"RecipeIngredient\",\"relationName\":\"InventoryItemToRecipeIngredient\"}],\"dbName\":null},\"Recipe\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"ingredients\",\"kind\":\"object\",\"type\":\"RecipeIngredient\",\"relationName\":\"RecipeToRecipeIngredient\"},{\"name\":\"locationId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"location\",\"kind\":\"object\",\"type\":\"Location\",\"relationName\":\"LocationToRecipe\"}],\"dbName\":null},\"RecipeIngredient\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"recipeId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"recipe\",\"kind\":\"object\",\"type\":\"Recipe\",\"relationName\":\"RecipeToRecipeIngredient\"},{\"name\":\"inventoryItemId\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"inventoryItem\",\"kind\":\"object\",\"type\":\"InventoryItem\",\"relationName\":\"InventoryItemToRecipeIngredient\"},{\"name\":\"quantity\",\"kind\":\"scalar\",\"type\":\"Float\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 defineDmmfProperty(exports.Prisma, config.runtimeDataModel)
 config.compilerWasm = {
       getRuntime: async () => require('./query_compiler_fast_bg.js'),

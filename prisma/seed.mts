@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import pkg from 'pg';
-import { PrismaClient } from './generated'; // Directing to your custom output path
+import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 const { Pool } = pkg;

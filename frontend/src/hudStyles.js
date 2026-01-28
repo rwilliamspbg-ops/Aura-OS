@@ -1,0 +1,27 @@
+// frontend/src/hudStyles.js
+export const hudStyles = {
+  hudBody: { flex: 1, display: 'flex', flexDirection: 'column', padding: '10px', position: 'relative' },
+  mainScroll: { flex: 1, overflowY: 'auto' },
+  grid3Col: { display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' },
+  tableCard: { background: '#0a0a0a', border: '1px solid #222', padding: '15px 5px', textAlign: 'center', borderRadius: '8px' },
+  pttDock: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', padding: '10px 0' },
+  pttBtn: { padding: '20px', background: '#000', color: '#fff', border: '2px solid', borderRadius: '12px', fontWeight: 'bold' },
+  footerNav: { height: '60px', background: '#080808', display: 'flex', borderTop: '1px solid #222' },
+  footTab: { flex: 1, background: 'none', border: 'none', color: '#fff', fontSize: '0.7rem' },
+  bottomSheet: { position: 'fixed', bottom: 0, left: 0, right: 0, height: '70vh', background: '#0a0a0a', borderTop: '2px solid #333', zIndex: 1000 },
+  sideDrawer: { position: 'fixed', top: 0, bottom: 0, width: '80%', background: '#000', zIndex: 2000, padding: '20px', transition: 'transform 0.3s ease' },
+  sheetHandle: { width: '40px', height: '5px', background: '#333', margin: '15px auto', borderRadius: '10px' },
+  categoryRow: { display: 'flex', gap: '10px', padding: '0 20px', overflowX: 'auto' },
+  catBtn: { padding: '8px 15px', background: '#111', border: '1px solid #333', color: '#0F0', borderRadius: '20px', fontSize: '0.8rem' },
+  kitchenTicket: { background: '#fff', color: '#000', padding: '10px', marginBottom: '8px', borderLeft: '8px solid #0F0' },
+  logBox: { background: '#050505', padding: '10px', flex: 1 },
+  logEntry: { fontSize: '0.7rem', borderBottom: '1px solid #111', padding: '8px 0', color: '#ccc' },
+  waveOverlay: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '5px', height: '50px' },
+  waveBar: { width: '6px', height: '20px', background: '#0F0', borderRadius: '3px' },
+  selectorBg: { background: '#000', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' },
+  neonText: { color: '#0F0', textShadow: '0 0 10px #0F0', marginBottom: '30px' },
+  roleGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' },
+  roleCard: { padding: '40px', background: 'transparent', border: '1px solid #0F0', color: '#0F0', fontSize: '1rem', borderRadius: '15px' },
+  actionLarge: { width: '100%', padding: '20px', background: '#111', color: '#0F0', border: '1px solid #0F0', marginTop: '20px' },
+  sectionTitle: { fontSize: '0.7rem', color: '#0F0', marginBottom: '10px', borderBottom: '1px solid #111' }
+};

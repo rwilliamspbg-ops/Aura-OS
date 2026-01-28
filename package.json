@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "postinstall": "prisma generate"
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -33,11 +34,6 @@
     "tsx": "^4.21.0",
     "typescript": "latest"
   },
-  
-  "scripts": {
-  "postinstall": "prisma generate"
-},
-
   
   "overrides": {
     "@types/react": "latest",

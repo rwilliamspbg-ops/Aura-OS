@@ -1,11 +1,36 @@
-
 version: '3.8'
+
 services:
-  backend:
-    build: ./backend
-    ports: ["3001:3001"]
-  frontend:
-    build: ./frontend
-    ports: ["3005:80"]
+  db:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: aura_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # The Healthcheck: Checks if the DB is accepting connections
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aura_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  agent:
+    build: .
+    command: npx tsx --env-file=.env Agent.mts
+    restart: always
     depends_on:
-      - backend
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@db:5432/aura_db?schema=public"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:

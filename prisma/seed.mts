@@ -5,7 +5,7 @@ import { PrismaPg } from '@prisma/adapter-pg';
 
 async function main() {
   // DYNAMIC IMPORT: This bypasses the static resolution errors
-  const { PrismaClient } = await import('@prisma/client');
+ import { PrismaClient } from './generated'
 
   const connectionString = process.env.DATABASE_URL;
   const pool = new Pool({ connectionString });

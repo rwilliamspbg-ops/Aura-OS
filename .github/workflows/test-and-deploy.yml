@@ -80,8 +80,8 @@ jobs:
           context: ./backend
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/backend:latest
-            ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+            ghcr.io/rwilliamspbg-ops/aura-os/backend:latest
+            ghcr.io/rwilliamspbg-ops/aura-os/backend:${{ github.sha }}
 
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
@@ -89,8 +89,8 @@ jobs:
           context: ./frontend
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/frontend:latest
-            ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+            ghcr.io/rwilliamspbg-ops/aura-os/frontend:latest
+            ghcr.io/rwilliamspbg-ops/aura-os/frontend:${{ github.sha }}
 
   deploy:
     runs-on: ubuntu-latest

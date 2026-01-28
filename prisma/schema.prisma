@@ -64,3 +64,14 @@ model RecipeIngredient {
   inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
   quantity        Float
 }
+enum Role {
+  OWNER
+  MANAGER
+  STAFF
+}
+
+enum Tier {
+  FREE
+  PRO
+  ENTERPRISE
+}

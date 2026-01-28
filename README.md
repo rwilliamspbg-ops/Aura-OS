@@ -36,3 +36,10 @@
 The entire ecosystem (DB + Agent) can be started with a single command:
 ```bash
 docker-compose up -d --build
+
+🔮 Roadmap
+Phase II: Cross-location logistics balancing (transferring stock between restaurants).
+
+Phase III: Fully autonomous procurement with vendor API integrations.
+
+

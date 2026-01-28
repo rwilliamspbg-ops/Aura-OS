@@ -1,3 +1,5 @@
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/a2324212-2889-4ffb-a49e-68f1f276d967" />
+
 # 🌌 AURA OS 
 **Autonomous Restaurant Operations & Intelligence System**
 

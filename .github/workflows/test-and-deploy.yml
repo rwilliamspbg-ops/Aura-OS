@@ -101,7 +101,8 @@ jobs:
       
       - name: Deploy with Docker Compose
         run: |
-          docker-compose pull
-          docker-compose up -d
+          # Use 'docker compose' instead of 'docker-compose'
+          docker compose pull
+          docker compose up -d
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

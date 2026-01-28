@@ -40,13 +40,14 @@ model Location {
 }
 
 model InventoryItem {
-  id           String   @id @default(cuid())
-  name         String
-  currentStock Int
-  parLevel     Int
-  unit         String
-  locationId   String
-  location     Location @relation(fields: [locationId], references: [id])
+  id               String             @id @default(cuid())
+  name             String
+  currentStock     Int
+  parLevel         Int
+  unit             String
+  locationId       String
+  location         Location           @relation(fields: [locationId], references: [id])
+  recipeIngredients RecipeIngredient[] // Add this line to fix the error
 }
 model Recipe {
   id          String             @id @default(cuid())

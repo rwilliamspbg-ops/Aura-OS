@@ -8,38 +8,35 @@ datasource db {
 }
 
 model User {
-  // ... other fields
-  locationId String?
-  location   Location? @relation(fields: [locationId], references: [id])
+  id           String    @id @default(cuid()) // This was missing or mismatched!
+  role         Role      @default(STAFF)
+  stripeId     String?   @unique
+  membership   Tier      @default(FREE)
+  sessions     Session[]
+  accounts     Account[] // Added to fix the second error
+  locationId   String?
+  location     Location? @relation(fields: [locationId], references: [id])
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime
-  updatedAt DateTime
+  id        String   @id @default(cuid())
   userId    String
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Account {
-  id           String    @id
-  accountId    String
-  providerId   String
+  id           String  @id @default(cuid())
   userId       String
-  user         User      @relation(references: [id], fields: [userId], onDelete: Cascade)
-  accessToken  String?
-  refreshToken String?
-  idToken      String?
-  expiresAt    DateTime?
-  password     String?
+  user         User    @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
+
+// Keep your Location, InventoryItem, and Recipe models below...
 model Location {
-  id    String @id @default(cuid())
-  name  String
-  users User[]
+  id        String          @id @default(cuid())
+  name      String
+  users     User[]
   inventory InventoryItem[]
+  recipes   Recipe[]        // Add this line
 }
 
 model InventoryItem {
@@ -50,4 +47,20 @@ model InventoryItem {
   unit         String
   locationId   String
   location     Location @relation(fields: [locationId], references: [id])
+}
+model Recipe {
+  id          String             @id @default(cuid())
+  name        String
+  ingredients RecipeIngredient[]
+  locationId  String
+  location    Location           @relation(fields: [locationId], references: [id])
+}
+
+model RecipeIngredient {
+  id              String        @id @default(cuid())
+  recipeId        String
+  recipe          Recipe        @relation(fields: [recipeId], references: [id])
+  inventoryItemId String
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  quantity        Float
 }

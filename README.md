@@ -5,7 +5,7 @@
   ![Aetos-OS_Logo](https://github.com/user-attachments/assets/73fee6d3-fa53-44f2-aa12-e11bc6495991)
 
 
-  ### 🌌 AURA OS
+  ### 🌌 Aetos-OS
   **The Future of Autonomous Restaurant Operations & Intelligence**
 
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -19,7 +19,7 @@
 ---
 
 ## 🚀 Overview
-**AURA OS** is a next-generation enterprise platform designed for high-scale restaurant logistics. It moves beyond traditional POS systems by utilizing an **Autonomous Agent** that proactively identifies supply chain friction before it impacts operations.
+**Aetos-OS** is a next-generation enterprise platform designed for high-scale restaurant logistics. It moves beyond traditional POS systems by utilizing an **Autonomous Agent** that proactively identifies supply chain friction before it impacts operations.
 
 ## 🛠 Core Capabilities
 * **Autonomous Inventory Agent:** A background service that monitors stock levels in real-time and identifies critical friction points.

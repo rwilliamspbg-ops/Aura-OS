@@ -1,43 +1,38 @@
-<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/a2324212-2889-4ffb-a49e-68f1f276d967" />
+<div align="center">
+  <img src="https://github.com/rwilliamspbg-ops/Aura-OS/blob/main/aura-os/public/logo.png?raw=true" alt="AURA OS Logo" width="600">
 
-# 🌌 AURA OS 
-**Autonomous Restaurant Operations & Intelligence System**
+  ### 🌌 AURA OS
+  **The Future of Autonomous Restaurant Operations & Intelligence**
 
-AURA OS is a next-generation enterprise platform designed for high-scale restaurant logistics. Built with the 2026 bleeding-edge stack, it focuses on "Inventory Friction" reduction and autonomous supply chain management.
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Node.js](https://img.shields.io/badge/Node.js-22-green.svg)](https://nodejs.org/)
+  [![Prisma](https://img.shields.io/badge/Prisma-7-blue.svg)](https://www.prisma.io/)
+  [![Docker](https://img.shields.io/badge/Docker-Enabled-blue.svg)](https://www.docker.com/)
 
-## 🛠 Tech Stack
-- **Framework:** Next.js 16 (App Router)
-- **Database:** PostgreSQL
-- **ORM:** Prisma 7 (with Driver Adapters)
-- **Runtime:** Node.js 22 (ESM)
-- **Styling:** Tailwind CSS 4
+  *Eliminating "Inventory Friction" through autonomous monitoring and predictive logistics.*
+</div>
 
-## 🚀 Quick Start
+---
 
-### 1. Install Dependencies
+## 🚀 Overview
+**AURA OS** is a next-generation enterprise platform designed for high-scale restaurant logistics. It moves beyond traditional POS systems by utilizing an **Autonomous Agent** that proactively identifies supply chain friction before it impacts operations.
+
+## 🛠 Core Capabilities
+* **Autonomous Inventory Agent:** A background service that monitors stock levels in real-time and identifies critical friction points.
+* **Intelligent Throttling:** Smart alerting logic that prevents notification fatigue by grouping friction events into hourly windows.
+* **Unified Infrastructure:** Fully containerized stack using **Docker Compose** for rapid, consistent deployment across multiple locations.
+* **Automated Logistics Logging:** A dedicated `restock.log` ecosystem that captures every friction event and resolution for audit-ready reporting.
+
+## 🏗 Tech Stack
+* **Framework:** [Next.js 16 (App Router)](https://nextjs.org/)
+* **Database:** [PostgreSQL](https://www.postgresql.org/)
+* **ORM:** [Prisma 7 (with Driver Adapters)](https://github.com/rwilliamspbg-ops/Aura-OS/tree/main)
+* **Runtime:** [Node.js 22 (ESM)](https://nodejs.org/)
+* **Containerization:** [Docker & Docker Compose](https://www.docker.com/)
+
+## 🚦 Quick Start
+
+### 1. Launch with Docker
+The entire ecosystem (DB + Agent) can be started with a single command:
 ```bash
-npm install
-```
-
-### 2. Environment Setup
-Create a `.env` file:
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/aura_db"
-```
-
-### 3. Database Initialization
-```bash
-npx prisma generate
-npx tsx prisma/seed.mts
-```
-
-### 4. Run Development Server
-```bash
-npm run dev
-```
-
-## 📈 Features
-- **Real-time Inventory Tracking:** Zero-latency stock updates using Prisma 7.
-- **Predictive Analytics:** Analyzes "Inventory Friction" to automate ordering.
-- **Autonomous Seeding:** Rapid multi-location deployment via ESM-optimized scripts.
-
+docker-compose up -d --build

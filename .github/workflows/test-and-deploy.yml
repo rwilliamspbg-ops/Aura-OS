@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm' # Re-enabled because root-level lockfile exists
+          cache: 'npm'
 
       - name: Install Root Dependencies
         run: npm ci || npm install

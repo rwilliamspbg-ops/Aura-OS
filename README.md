@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="[https://github.com/rwilliamspbg-ops/Aura-OS/blob/main/aura-os/public/logo.png?raw=true](https://github.com/user-attachments/assets/73fee6d3-fa53-44f2-aa12-e11bc6495991)" alt="Aetos-OS" width="600">
+  <img src=(https://github.com/user-attachments/assets/73fee6d3-fa53-44f2-aa12-e11bc6495991)" alt="Aetos-OS" width="600">
 
 
   ![Aetos-OS_Logo](https://github.com/user-attachments/assets/73fee6d3-fa53-44f2-aa12-e11bc6495991)

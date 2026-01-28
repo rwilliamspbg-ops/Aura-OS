@@ -1,0 +1,9 @@
+{
+  "name": "aura-backend",
+  "version": "1.0.0",
+  "dependencies": {
+    "@google/genai": "^1.38.0",
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3"
+  }
+}

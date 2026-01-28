@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; connect-src 'self' http://10.0.0.5:3001 ws://10.0.0.5:3001 http://10.0.0.5:3005 ws://10.0.0.5:3005;">
+    <title>AURA OS ENTERPRISE</title>
+    <style>
+      body { margin: 0; background: #000; color: #fff; font-family: monospace; overflow: hidden; }
+      @keyframes wave {
+        from { height: 5px; opacity: 0.2; background-color: #050; }
+        to { height: 40px; opacity: 1; background-color: #0F0; }
+      }
+      /* Smooth scroll for HUD feeds */
+      * { scrollbar-width: none; -ms-overflow-style: none; }
+      *::-webkit-scrollbar { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+// schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  role         Role      @default(STAFF) // OWNER, MANAGER, STAFF
+  stripeId     String?   @unique
+  membership   Tier      @default(FREE)
+  sessions     Session[]
+  locationId   String
+  location     Location  @relation(fields: [locationId], references: [id])
+}
+
+model Location {
+  id             String          @id @default(cuid())
+  name           String
+  inventory      InventoryItem[]
+  recipes        Recipe[]
+  orders         Order[]
+  users          User[]
+}
+
+model InventoryItem {
+  id          String   @id @default(cuid())
+  name        String
+  currentStock Float
+  parLevel    Float    // For Auto-Ordering
+  unit        String   // kg, liters, units
+  locationId  String
+  location    Location @relation(fields: [locationId], references: [id])
+}
+
+model Recipe {
+  id          String             @id @default(cuid())
+  name        String
+  ingredients RecipeIngredient[]
+  locationId  String
+  location    Location           @relation(fields: [locationId], references: [id])
+}
+
+model RecipeIngredient {
+  id              String        @id @default(cuid())
+  recipeId        String
+  recipe          Recipe        @relation(fields: [recipeId], references: [id])
+  inventoryItemId String
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  quantity        Float
+}
+
+enum Role { OWNER; MANAGER; STAFF }
+enum Tier { FREE; PRO; ENTERPRISE }

@@ -54,6 +54,8 @@ export default function App() {
           {/* Add other HUD components here */}
         </div>
         
+import VisualWaveform from './components/VisualWaveform';
+
         {/* PTT Dock remains at the bottom of hudBody */}
         <div style={styles.pttDock}>
            <button onMouseDown={() => handleHoldStart('Kitchen')} style={styles.pttBtn}>🎤 KITCHEN</button>

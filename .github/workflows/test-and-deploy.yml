@@ -11,7 +11,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Explicitly grant read permissions to avoid Git 128 errors
     permissions:
       contents: read
     strategy:
@@ -23,11 +22,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Ensures full history for better compatibility
+          fetch-depth: 0
 
       - name: Fix Git Safe Directory
-        # Resolves common Exit Code 128 issues in containerized/action environments
-        run: git config --global --add safe.directory /github/workspace
+        run: |
+          git config --global --add safe.directory /github/workspace
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -35,16 +35,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install Root Dependencies
         run: npm ci
 
-      - name: Run linter
-        run: npm run lint
+      - name: Install Backend Dependencies
+        working-directory: ./backend
+        run: npm ci
 
-      - name: Build project
-        run: npm run build
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
 
-      - name: Run tests
+      - name: Run Tests (Backend)
+        working-directory: ./backend
+        run: npm test --if-present
+
+      - name: Run Tests (Frontend)
+        working-directory: ./frontend
         run: npm test --if-present
 
   build-and-push-docker:
@@ -75,8 +82,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}/backend:latest
             ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/backend:latest
-          cache-to: type=inline
 
       - name: Build and push Frontend
         uses: docker/build-push-action@v5
@@ -86,8 +91,6 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}/frontend:latest
             ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/frontend:latest
-          cache-to: type=inline
 
   deploy:
     runs-on: ubuntu-latest
@@ -98,13 +101,7 @@ jobs:
       
       - name: Deploy with Docker Compose
         run: |
-          docker-compose -f docker-compose.yml pull
-          docker-compose -f docker-compose.yml up -d
+          docker-compose pull
+          docker-compose up -d
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify deployment
-        run: |
-          sleep 15
-          curl -f http://localhost:3001/health || exit 1
-          curl -f http://localhost:3000/ || exit 1

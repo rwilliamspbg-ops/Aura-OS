@@ -1,0 +1,20 @@
+config:
+  target: "http://localhost:3001" # Replace with your production URL if needed
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: Warm up
+    - duration: 120
+      arrivalRate: 50
+      rampTo: 100
+      name: Spike load
+scenarios:
+  - name: "Inventory Sync Stress"
+    flow:
+      - get:
+          url: "/api/inventory"
+      - post:
+          url: "/api/order"
+          json:
+            item: "autonomous-sensor"
+            quantity: 50

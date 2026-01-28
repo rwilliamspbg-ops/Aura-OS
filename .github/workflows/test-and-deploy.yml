@@ -33,8 +33,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          # Caching is disabled here because lockfiles are in subdirectories
-          # cache: 'npm' 
+          cache: 'npm' # Re-enabled because root-level lockfile exists
+
+      - name: Install Root Dependencies
+        run: npm ci || npm install
 
       - name: Install Backend Deps
         working-directory: ./backend

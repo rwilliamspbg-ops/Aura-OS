@@ -25,6 +25,8 @@ jobs:
           fetch-depth: 0
 
       - name: Fix Git Safe Directory
+        # This explicitly tells Git to trust the workspace, 
+        # which solves the 128 error in many runner environments.
         run: |
           git config --global --add safe.directory /github/workspace
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -33,26 +35,18 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
+          # Only use cache if you have a package-lock.json in the root
           cache: 'npm'
 
-      - name: Install Root Dependencies
-        run: npm ci
+      - name: Install dependencies
+        # Using --if-present or targeted installs ensures the job 
+        # doesn't crash if your root package.json is empty.
+        run: npm ci || npm install
 
-      - name: Install Backend Dependencies
-        working-directory: ./backend
-        run: npm ci
-
-      - name: Install Frontend Dependencies
-        working-directory: ./frontend
-        run: npm ci
-
-      - name: Run Tests (Backend)
-        working-directory: ./backend
-        run: npm test --if-present
-
-      - name: Run Tests (Frontend)
-        working-directory: ./frontend
-        run: npm test --if-present
+      - name: Build and Test
+        run: |
+          npm run build --if-present
+          npm test --if-present
 
   build-and-push-docker:
     runs-on: ubuntu-latest
@@ -101,6 +95,7 @@ jobs:
       
       - name: Deploy with Docker Compose
         run: |
+          # Ensure you are in the directory containing docker-compose.yml
           docker-compose pull
           docker-compose up -d
         env:

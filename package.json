@@ -33,6 +33,12 @@
     "tsx": "^4.21.0",
     "typescript": "latest"
   },
+  
+  "scripts": {
+  "postinstall": "prisma generate"
+},
+
+  
   "overrides": {
     "@types/react": "latest",
     "@types/react-dom": "latest"

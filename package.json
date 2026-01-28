@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate"
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@google/genai": "latest",
@@ -33,10 +33,5 @@
     "tailwindcss": "latest",
     "tsx": "^4.21.0",
     "typescript": "latest"
-  },
-  
-  "overrides": {
-    "@types/react": "latest",
-    "@types/react-dom": "latest"
   }
 }
